@@ -35,6 +35,6 @@ If the course itself has errored, admin can simply change its status to "Errored
 
 ### 📁 Profile 📁
 
-You can check your profile, where you can see your roles and the courses you have participated in.
+You can check your profile, where you can see your roles and the courses you have participated in with link to them.
 
 
