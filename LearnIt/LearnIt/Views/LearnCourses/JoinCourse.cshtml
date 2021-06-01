@@ -1,0 +1,23 @@
+﻿@model LearnIt.Data.Entities.LearnCourse
+
+@{
+    ViewData["Title"] = "Join";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="w3-card-4">
+    <header class="w3-container w3-blue">
+        <h1 class="w3-margin w3-jumbo" style="text-align: center;">Confirm your enrollement for @Model.Name</h1>
+    </header>
+</div>
+<hr />
+
+<div class="w3-center">
+    <form asp-action="JoinCourse">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Join course" class="w3-btn w3-blue" style="width:50%"/>
+        <hr />
+        <a asp-action="Index" class="w3-btn w3-blue" style="width:50%">Back to List</a>
+    </form>
+</div>
+<hr />

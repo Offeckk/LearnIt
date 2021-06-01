@@ -1,0 +1,41 @@
+﻿@model LearnCourseCreateViewModel
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="w3-card-4">
+    <header class="w3-container w3-blue">
+        <h1 class="w3-margin w3-jumbo" style="text-align: center;">Create new course</h1>
+    </header>
+</div>
+
+
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group" style="width:800px; margin:0 auto; padding:20px 0;">
+                <input asp-for="Name" class="w3-input" placeholder="NAME" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="width:800px; margin:0 auto; padding:20px 0;">
+                <input asp-for="Description" class="w3-input" placeholder="DESCRIPTION" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="width:800px; margin:0 auto; padding:20px 0;">
+                <input asp-for="StartDate" class="w3-input" placeholder="STARTING DATE" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="width:800px; margin:0 auto; padding:20px 0;">
+                <input asp-for="EndDate" class="w3-input" placeholder="ENDING DATE" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="width:800px; margin:0 auto; padding:20px 0;">
+                <input type="submit" value="Create" class="w3-btn w3-blue" />
+                <a class="w3-btn w3-blue" asp-action="Index">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>

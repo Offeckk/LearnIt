@@ -1,0 +1,92 @@
+﻿@model LearnCourseDetailsViewModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="w3-card-4">
+    <header class="w3-container w3-blue">
+        <h1 class="w3-margin w3-jumbo" style="text-align: center;">@Model.Name</h1>
+    </header>
+</div>
+
+<div class="w3-container">
+    <h5>
+        Description: @Model.Description
+    </h5>
+    <h5>
+        Teacher: @Model.Teacher
+    </h5>
+</div>
+
+<div class="w3-container">
+    <div class="w3-panel w3-border-blue">
+        <h1>Dates: </h1>
+        <h5>Start Date - @Convert.ToString(string.Format("{0:dd/MM/yyyy}", Model.StartDate))</h5>
+        <hr />
+        <h5>End Date - @Convert.ToString(string.Format("{0:dd/MM/yyyy}", Model.EndDate))</h5>
+    </div>  
+</div>
+<div class="w3-container">
+    @if (this.User.IsInRole("Admin"))
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="w3-btn w3-blue">Edit</a>
+        <a asp-action="Delete" asp-route-id="@Model.Id" class="w3-btn w3-blue">Delete</a>
+    }
+    else if (this.User.IsInRole("Teacher"))
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="w3-btn w3-blue">Edit</a>
+        <a> | </a>
+    }
+
+    @if (!Model.IsCurrentUserJoined && Model.Status == "Upcoming")
+    {
+        <a asp-action="JoinCourse" asp-route-id="@Model.Id" class="w3-btn w3-blue">Join the course</a>
+        <a> | </a>
+    }
+    <a asp-action="Index" class="w3-btn w3-blue">Back to List</a>
+</div>
+
+
+<div class="w3-container">
+    <h2 style="text-align: center; text-transform: uppercase;">Students(@Model.Students.Count())</h2>
+    @if (Model.IsCurrentUserJoined && this.User.IsInRole("Student"))
+    {
+        <h4 style="text-align: center;">You are enrolled in this course as @this.User.Identity.Name </h4>
+    }
+
+    <div class="card-body">
+
+        @foreach (var item in Model.Students)
+        {
+            <form method="post">
+                <div class="w3-card">
+                    @item @if (this.User.IsInRole("Admin")) { 
+                        <p>-</p>
+                        <button class="btn btn-link"
+                            onclick="return confirm('Confirm kicking user: @item')"
+                            asp-controller="LearnCourses" asp-action="KickUserFromCourse"
+                            asp-route-userName="@item"
+                            asp-route-courseId="@Model.Id"
+                            style="background: none!important;
+                               border: none;
+                               padding: 0!important;
+                               font-family: arial, sans-serif;
+                               color: #069;
+                               cursor: pointer;">
+                        Kick
+                    </button>
+                    } 
+ 
+                     
+
+                </div>
+            </form>
+
+        }
+        <div asp-validation-summary="All" class="text-danger"></div>
+    </div>
+</div>

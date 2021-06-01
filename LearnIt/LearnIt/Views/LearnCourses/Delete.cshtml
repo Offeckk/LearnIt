@@ -1,0 +1,23 @@
+﻿@model LearnIt.Data.Entities.LearnCourse
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h3 class="w3-center">Are you sure you want to delete: @Model.Name?</h3>
+
+<div class="w3-center">
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Delete" class="w3-btn w3-blue w3-center" />
+        
+    </form>
+</div>
+
+<hr />
+
+<div class="w3-center">
+    <a class="w3-btn w3-blue w3-center" asp-action="Index">Back to List</a>
+</div>

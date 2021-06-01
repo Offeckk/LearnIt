@@ -1,0 +1,35 @@
+﻿@model List<ManageUserRolesViewModel>
+@{
+    ViewData["Title"] = "Manage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<form method="post">
+    <div class="w3-card-4">
+        <header class="w3-container w3-blue">
+            <h2>Manage User Roles</h2>
+            Add/Remove Roles for User: @ViewBag.UserName.
+        </header>
+        <div class="w3-container">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <div class="form-check m-1">
+                    <input type="hidden" asp-for="@Model[i].Id" />
+                    <input type="hidden" asp-for="@Model[i].RoleName" />
+                    <input asp-for="@Model[i].IsSelected" class="w3-check" />
+                    <label class="w3-validate" asp-for="@Model[i].IsSelected">
+                        @Model[i].RoleName
+                    </label>
+                </div>
+            }
+            <div asp-validation-summary="All" class="text-danger"></div>
+        </div>
+
+        <footer class="w3-container w3-blue">
+            <input type="submit" value="Update" class="w3-btn"
+                   style="width:auto" />
+            <a asp-action="Index"
+               class="w3-btn" style="width:auto">Cancel</a>
+        </footer>
+
+    </div>
+</form>

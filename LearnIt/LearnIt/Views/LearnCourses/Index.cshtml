@@ -1,0 +1,66 @@
+﻿@model IEnumerable<LearnIt.Data.Entities.LearnCourse>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="w3-card-4">
+    <header class="w3-container w3-blue">
+        <h1 class="w3-margin w3-jumbo" style="text-align: center;">HERE YOU CAN SEE ALL COURSES</h1>
+    </header>
+</div>
+
+<hr />
+
+<div class="w3-container">
+    @if (this.User.IsInRole("Admin") || this.User.IsInRole("Teacher"))
+    {
+        <p>
+            <a asp-action="Create">Add new course</a>
+        </p>
+    }
+
+    <table class="w3-table-all w3-large">
+        <thead>
+            <tr class="w3-blue">
+                <th>Learn Course</th>
+                <th>Starting Date</th>
+                <th>Ending Date</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.StartDate))</td>
+                <td>@Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.EndDate))</td>
+                <td>@Html.DisplayFor(modelItem => item.Status.Name)</td>
+                <td>
+                    @if (this.User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        <a> | </a>
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        <a> | </a>
+                        <a asp-action="Details" asp-route-id="@item.Id">View</a>
+                    }
+                    else if (this.User.IsInRole("Student"))
+                    {
+                        <a asp-action="Details" asp-route-id="@item.Id">View</a>
+                    }
+                    else if (this.User.IsInRole("Teacher"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        <a> | </a>
+                        <a asp-action="Details" asp-route-id="@item.Id">View</a>
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+

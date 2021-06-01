@@ -1,0 +1,38 @@
+﻿@model List<UserRolesViewModel>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="w3-card-4">
+    <header class="w3-container w3-blue">
+        <h2>Users</h2>
+    </header>
+</div>
+
+    <table class="w3-table-all w3-large">
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>Roles</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Email</td>
+                <td>@string.Join(" , ", user.Roles.ToList())</td>
+                <td>
+                    <form method="post">
+                        <a class="btn btn-primary" asp-controller="UserRoles" asp-action="Manage" asp-route-userId="@user.Id">Manage Roles</a>
+                        <button class="btn btn-primary"
+                                onclick="return confirm('Confirm deleting user: @user.Email')"
+                                asp-controller="UserRoles" asp-action="DeleteUser"
+                                asp-route-userId="@user.Id">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </table>
