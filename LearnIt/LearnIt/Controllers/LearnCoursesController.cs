@@ -27,11 +27,29 @@ namespace LearnIt.Controllers
         public async Task<IActionResult> Index()
         {
 
+
             string currentUserId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             LIUser currentUser = await _context.Users.FindAsync(currentUserId);
 
+
+
             var courses = await _context.LearnCourses.Include(l => l.Status).Include(u => u.Users).ToListAsync();
             courses = await UpdateLearnCourseStatus(courses);
+
+            if (await _userManager.IsInRoleAsync(currentUser, "Teacher"))
+            {
+                List<LearnCourse> teacherCourses = courses.Where(c => c.Users.Contains(currentUser)).ToList();
+                List<LearnCourse> foreignCourses = courses.Except(teacherCourses).ToList();
+
+
+                TeacherIndexViewModel teacherIndexViewModel = new TeacherIndexViewModel()
+                {
+                    TeacherCourses = teacherCourses,
+                    ForeignCourses = foreignCourses
+                };
+
+                return View("TeacherIndex", teacherIndexViewModel);
+            }
 
             if (await _userManager.IsInRoleAsync(currentUser, "Student") && !(await _userManager.IsInRoleAsync(currentUser, "Admin")))
             {
@@ -51,29 +69,21 @@ namespace LearnIt.Controllers
 
             string currentUserId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             LIUser currentUser = await _context.Users.FindAsync(currentUserId);
-
             
-
             var learnCourse = await _context.LearnCourses
                 .Include(l => l.Status)
                 .Include(u => u.Users)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            
-
-            var teachers = _userManager.GetUsersInRoleAsync("Teacher").Result;
-            
+            var teachers = _userManager.GetUsersInRoleAsync("Teacher").Result;           
 
             var students = await _userManager.Users.Include(c => c.Courses)
                 .Where(c => c.Courses.Contains(learnCourse))
                 .Where(i => !teachers.Select(t => t.Id).Contains(i.Id))
                 .ToListAsync();
 
-
             var studentsName = students.Select(s => s.UserName).ToList();
-
-           
-
+         
             var teacher = _context.Users.Include(c => c.Courses)
                 .Where(c => c.Courses.Contains(learnCourse))
                 .FirstOrDefault().UserName;
@@ -145,6 +155,11 @@ namespace LearnIt.Controllers
         [Authorize(Roles = "Admin,Teacher")]
         public async Task<IActionResult> Edit(string id)
         {
+            string currentUserId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            LIUser currentUser = await _context.Users.FindAsync(currentUserId);
+
+            
+
             if (id == null)
             {
                 return NotFound();
@@ -156,11 +171,21 @@ namespace LearnIt.Controllers
                 Statuses = await this._context.CourseStatuses.ToListAsync()
             };
 
-            var learnCourse = await _context.LearnCourses.FindAsync(id);
+            var learnCourse = await _context.LearnCourses.Include(c => c.Users).FirstOrDefaultAsync(c => c.Id == id);
             if (learnCourse == null)
             {
                 return NotFound();
             }
+
+            if (!learnCourse.Users.Contains(currentUser) && !(await _userManager.IsInRoleAsync(currentUser, "Admin")))
+            {
+                ErrorPageViewModel errorModel = new ErrorPageViewModel()
+                {
+                    ErrorMessage = "You are not the teacher of this course"
+                };
+                return View("ErrorPage", errorModel);
+            }
+
             model.Name = learnCourse.Name;
             model.Description = learnCourse.Description;
             model.StartDate = learnCourse.StartDate;
