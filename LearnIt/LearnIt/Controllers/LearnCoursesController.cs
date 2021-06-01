@@ -293,7 +293,7 @@ namespace LearnIt.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> JoinCourseConfirmed(string id)
         {
-            LearnCourse learnCourse = await _context.LearnCourses.Include(s => s.Users).FirstOrDefaultAsync(x => x.Id == id);
+            LearnCourse learnCourse = await _context.LearnCourses.Include(s => s.Users).Include(c => c.Status).FirstOrDefaultAsync(x => x.Id == id);
             string studentId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             LIUser student = await _context.Users.FindAsync(studentId);
 
