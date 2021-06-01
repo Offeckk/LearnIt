@@ -36,7 +36,7 @@ namespace LearnIt.Controllers
             var courses = await _context.LearnCourses.Include(l => l.Status).Include(u => u.Users).ToListAsync();
             courses = await UpdateLearnCourseStatus(courses);
 
-            if (await _userManager.IsInRoleAsync(currentUser, "Teacher"))
+            if (await _userManager.IsInRoleAsync(currentUser, "Teacher") && !(await _userManager.IsInRoleAsync(currentUser, "Admin")))
             {
                 List<LearnCourse> teacherCourses = courses.Where(c => c.Users.Contains(currentUser)).ToList();
                 List<LearnCourse> foreignCourses = courses.Except(teacherCourses).ToList();
