@@ -41,7 +41,7 @@ namespace LearnIt.Controllers
             return View(courses);
         }
 
-        [Authorize(Roles = "Admin,Student")]
+        [Authorize(Roles = "Admin,Student,Teacher")]
         public async Task<IActionResult> Details(string id)
         {
             if (id == null)
