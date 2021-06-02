@@ -54,10 +54,25 @@
 
         <!-- Navbar on small screens -->
         <div id="navDemo" class="w3-bar-block w3-white w3-hide w3-hide-large w3-hide-medium w3-large">
-            <a asp-controller="Home" asp-action="MyProfile" class="w3-bar-item w3-button w3-padding-large">My Profile</a>
-            <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 2</a>
-            <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 3</a>
-            <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 4</a>
+            @if (!this.User.Identity.IsAuthenticated)
+            {
+                <a asp-area="Identity" asp-page="/Account/Login" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Login</a>
+                <a asp-area="Identity" asp-page="/Account/Register" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Register</a>
+            }
+            else
+            {
+                <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-blue" href="javascript:void(0);" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
+                <a asp-controller="Home" asp-action="Index" class="w3-bar-item w3-button w3-padding-large w3-white">Home</a>
+                @if (this.User.IsInRole("Admin"))
+                {
+                    <a asp-area="" asp-controller="UserRoles" asp-action="Index" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Users</a>
+                    <a asp-area="" asp-controller="RoleManager" asp-action="Index" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Role Manager</a>
+                }
+                <a asp-controller="LearnCourses" asp-action="Index" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Courses</a>
+                <a asp-area="" asp-controller="Home" asp-action="MyProfile" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">My Profile</a>
+
+                <a asp-area="Identity" asp-page="/Account/Logout" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Logout</a>
+            }
         </div>
     </div>
 
