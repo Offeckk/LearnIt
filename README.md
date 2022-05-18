@@ -4,7 +4,6 @@ This is a Learning Courses Website, made with ASP.NET Core
 ### Idea 📚
 Personal project attempting to create an 
 easy application to use for both teachers and students✔️
- 
 <br />
 
 ### Functionality 
