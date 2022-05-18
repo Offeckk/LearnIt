@@ -3,9 +3,7 @@ This is a Learning Courses Website, made with ASP.NET Core
 
 ### Idea 📚
 Personal project attempting to create an 
-easy application to use for both teachers and students.
-This is alpha version, so there is a lot to improve.
-I have a lot of things in mind, so beta is comming...✔️
+easy application to use for both teachers and students✔️
  
 <br />
 
